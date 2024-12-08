@@ -159,15 +159,19 @@ for b, (X, y) in enumerate(loader):
     
     logger.warning(f" [x] Requesting {now} {offloaded} being offloaded")
 
-    response = eeprocessor.call(request)
-    
-    y_pred_remote = response['output']
-    hostname = response['hostname']
-    
-    certainty_r, predicted_r = torch.max(nn.functional.softmax(y_pred_remote, dim=-1), 1)
-    
-    certainty_r = certainty_r.cpu().detach().numpy().tolist()
-    predicted_r = predicted_r.cpu().detach().numpy().tolist()
+    if offloaded:
+        response = eeprocessor.call(request)
+        
+        y_pred_remote = response['output']
+        hostname = response['hostname']
+        
+        certainty_r, predicted_r = torch.max(nn.functional.softmax(y_pred_remote, dim=-1), 1)
+        
+        certainty_r = certainty_r.cpu().detach().numpy().tolist()
+        predicted_r = predicted_r.cpu().detach().numpy().tolist()
+    else:
+        certainty_r = []
+        predicted_r = []
     
     c_certainty = []
     c_predicted = []
