@@ -40,6 +40,7 @@ parser.add_argument('--normal-exit2-min-certainty', help='Minimum certainty for 
 parser.add_argument('--attack-exit2-min-certainty', help='Minimum certainty for attack exit 2', default=0.98, type=float)
 parser.add_argument('--savefile', help='File to save to')
 parser.add_argument('--debug', help='Enable debug messages', action='store_true')
+parser.add_argument('--client-id', help='Client ID', default=os.getpid())
 
 args = parser.parse_args()
 
@@ -152,6 +153,7 @@ for b, (X, y) in enumerate(loader):
     request = {
         'timestamp': now,
         'bb1': torch.tensor(to_offload),
+        'client_id': args.client_id
     }
     
     offloaded = len(to_offload)

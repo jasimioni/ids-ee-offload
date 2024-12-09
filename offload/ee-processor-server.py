@@ -52,11 +52,12 @@ channel.queue_declare(queue=args.mq_queue)
 def on_request(ch, method, props, body):
     start = time.time()
     time_records = {'start': start}
-    print(f" {datetime.fromtimestamp(start).strftime('%Y-%m-%d %H:%M:%S.%f')} - ", end='')
+    print(f"{client_id} : {datetime.fromtimestamp(start).strftime('%Y-%m-%d %H:%M:%S.%f')} - ", end='')
 
     response = {}
     response['input_size'] = sys.getsizeof(body)
     body = pickle.loads(body)
+    client_id = body.get('client_id')
 
     # sample = body['sample'].to(device)
     bb1 = body['bb1'].to(device)
