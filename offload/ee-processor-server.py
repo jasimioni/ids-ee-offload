@@ -52,7 +52,7 @@ channel.queue_declare(queue=args.mq_queue)
 def on_request(ch, method, props, body):
     start = time.time()
     time_records = {'start': start}
-    print(f" {datetime.fromtimestamp(start).strftime('%Y-%m-%d %H:%M:%S.%f')}")
+    print(f" {datetime.fromtimestamp(start).strftime('%Y-%m-%d %H:%M:%S.%f')} - ", end='')
 
     response = {}
     response['input_size'] = sys.getsizeof(body)
@@ -74,6 +74,10 @@ def on_request(ch, method, props, body):
                          correlation_id=props.correlation_id),
                      body=pickle.dumps(response))
     ch.basic_ack(delivery_tag=method.delivery_tag)
+    end = time.time()
+    count = len(e2)
+    elapsed = end - start
+    print(f" {datetime.fromtimestamp(end).strftime('%Y-%m-%d %H:%M:%S.%f')} : {count} : {elapsed * 1000:.2f} ms")
 
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(queue=args.mq_queue, on_message_callback=on_request)
