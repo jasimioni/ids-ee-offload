@@ -77,7 +77,7 @@ def on_request(ch, method, props, body):
     end = time.time()
     count = len(e2)
     elapsed = end - start
-    print(f" {datetime.fromtimestamp(end).strftime('%Y-%m-%d %H:%M:%S.%f')} : {count} : {elapsed * 1000:.2f} ms")
+    print(f" {datetime.fromtimestamp(end).strftime('%Y-%m-%d %H:%M:%S.%f')} : {count} : {elapsed * 1000:.2f} ms : {1000 * elapsed / count:.2f} ms")
 
 channel.basic_qos(prefetch_count=1)
 channel.basic_consume(queue=args.mq_queue, on_message_callback=on_request)
